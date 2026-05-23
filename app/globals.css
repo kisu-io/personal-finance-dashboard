@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Apple-inspired light · black / white / red / green only */
+    --background: 240 14% 96%;        /* #F2F2F7 */
+    --foreground: 0 0% 0%;            /* #000000 */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;              /* black */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 8% 92%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 240 8% 92%;
+    --muted-foreground: 240 3% 44%;   /* #6E6E73 */
+    --accent: 240 8% 92%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 356 100% 42%;      /* #D70015 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 11% 90%;            /* #E4E4E9 */
+    --input: 240 11% 90%;
+    --ring: 0 0% 0%;
+    --radius: 0.875rem;
+
+    /* finance semantics */
+    --pos: 138 64% 30%;               /* #1C7C3B green */
+    --pos-tint: 138 45% 92%;
+    --neg: 356 100% 42%;              /* #D70015 red */
+    --neg-tint: 354 83% 95%;
+    --faint: 240 3% 62%;              /* #9A9AA0 */
+    --sep: 240 14% 93%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    letter-spacing: -0.01em;
+  }
+  .tabular { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+}
+
+@layer utilities {
+  .text-faint { color: hsl(var(--faint)); }
+  .grayscale-ico { filter: grayscale(1); }
+  .safe-bottom { padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
+}
