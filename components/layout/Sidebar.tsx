@@ -74,9 +74,9 @@ export function Sidebar({ view, setView, onAdd, onFx }: SidebarProps) {
         </div>
 
         {/* FX rate */}
-        <div onClick={onFx} className="tabular mt-2.5 cursor-pointer text-xs text-faint">
+        <button onClick={onFx} className="tabular mt-2.5 cursor-pointer text-left text-xs text-faint">
           1 $ = {fmtN(db.fx)} ₫
-        </div>
+        </button>
       </div>
 
       {/* Nav */}
