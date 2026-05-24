@@ -6,6 +6,7 @@ import { CLASSES, TERMS } from "@/lib/classes";
 import { pct, arrow } from "@/lib/format";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { NetWorthChart, AllocDonut } from "@/components/charts/Charts";
 
 const RANGES = [{ l: "6M", r: 6 }, { l: "1Y", r: 12 }, { l: "All", r: 0 }];
@@ -31,11 +32,20 @@ export function Overview() {
       <Card className="mb-3 p-4">
         <div className="flex items-center justify-between">
           <div className="text-[13px] font-semibold text-muted-foreground">Net worth over time</div>
-          <div className="flex rounded-[9px] bg-[#E9E9EB] p-0.5 text-xs font-semibold">
+          <ToggleGroup
+            type="single"
+            value={String(range)}
+            onValueChange={(v) => { if (v !== "") setRange(Number(v)); }}
+            className="h-auto gap-0 rounded-[9px] bg-[#E9E9EB] p-0.5"
+          >
             {RANGES.map((x) => (
-              <button key={x.l} onClick={() => setRange(x.r)} className={`rounded-[7px] px-2.5 py-1 ${range === x.r ? "bg-card shadow-sm" : "text-muted-foreground"}`}>{x.l}</button>
+              <ToggleGroupItem
+                key={x.l}
+                value={String(x.r)}
+                className="h-auto min-w-0 rounded-[7px] px-2.5 py-1 text-xs font-semibold text-muted-foreground hover:bg-transparent hover:text-muted-foreground data-[state=on]:bg-card data-[state=on]:shadow-sm data-[state=on]:text-foreground"
+              >{x.l}</ToggleGroupItem>
             ))}
-          </div>
+          </ToggleGroup>
         </div>
         <div className="mt-2 h-[170px]"><NetWorthChart labels={labels} data={data} fmt={ds} /></div>
       </Card>

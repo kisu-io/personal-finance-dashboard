@@ -3,6 +3,7 @@ import { useStore } from "@/lib/store";
 import { snapReturn, twr, xirr, buildFlows, grossAssets, costBasis } from "@/lib/finance";
 import { pct, arrow } from "@/lib/format";
 import { Card } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const BENCHES: [string, number][] = [
   ["VN-Index", 11.5], ["BTC (USD)", 42.0], ["USD savings 4.5%", 4.5], ["Gold SJC", 18.0],
@@ -45,32 +46,32 @@ export function Performance() {
 
       <div className="mx-1.5 mb-2 mt-5 text-[13px] font-semibold text-muted-foreground">Vs benchmark · ITD</div>
       <Card className="p-4">
-        <table className="w-full border-collapse text-[13.5px]">
-          <thead>
-            <tr className="text-[11.5px] font-semibold text-muted-foreground">
-              <th className="border-b border-border py-1.5 text-left">Benchmark</th>
-              <th className="border-b border-border py-1.5 text-right">Return</th>
-              <th className="border-b border-border py-1.5 text-right">vs you</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-[11.5px]">Benchmark</TableHead>
+              <TableHead className="text-right text-[11.5px]">Return</TableHead>
+              <TableHead className="text-right text-[11.5px]">vs you</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {BENCHES.map(([n, r]) => {
               const diff = me - r;
               return (
-                <tr key={n}>
-                  <td className="border-b border-[hsl(var(--sep))] py-2.5 text-left font-medium">{n}</td>
-                  <td className="tabular border-b border-[hsl(var(--sep))] py-2.5 text-right font-semibold">{pct(r)}</td>
-                  <td className={`tabular border-b border-[hsl(var(--sep))] py-2.5 text-right font-semibold ${diff >= 0 ? "text-pos" : "text-neg"}`}>{arrow(diff)} {pct(diff)}</td>
-                </tr>
+                <TableRow key={n}>
+                  <TableCell className="py-2.5 font-medium">{n}</TableCell>
+                  <TableCell className="tabular py-2.5 text-right font-semibold">{pct(r)}</TableCell>
+                  <TableCell className={`tabular py-2.5 text-right font-semibold ${diff >= 0 ? "text-pos" : "text-neg"}`}>{arrow(diff)} {pct(diff)}</TableCell>
+                </TableRow>
               );
             })}
-            <tr>
-              <td className="py-2.5 text-left font-bold">You (XIRR)</td>
-              <td className="tabular py-2.5 text-right font-bold">{me ? pct(me) : "—"}</td>
-              <td className="py-2.5 text-right">—</td>
-            </tr>
-          </tbody>
-        </table>
+            <TableRow>
+              <TableCell className="py-2.5 font-bold">You (XIRR)</TableCell>
+              <TableCell className="tabular py-2.5 text-right font-bold">{me ? pct(me) : "—"}</TableCell>
+              <TableCell className="py-2.5 text-right">—</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </Card>
     </div>
   );

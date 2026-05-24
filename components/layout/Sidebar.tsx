@@ -4,6 +4,7 @@ import { useStore } from "@/lib/store";
 import { grossAssets, totalDebt, netWorth, xirr, buildFlows } from "@/lib/finance";
 import { pct, arrow, fmtN } from "@/lib/format";
 import type { ViewKey } from "@/components/BottomNav";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const NAV: { key: ViewKey; label: string; path: string }[] = [
   { key: "overview",  label: "Overview",     path: "M3 13h8V3H3zM13 21h8V8h-8zM13 3v3M3 17v4h8" },
@@ -50,17 +51,22 @@ export function Sidebar({ view, setView, onAdd, onFx }: SidebarProps) {
         <div className="mt-0.5 text-xs text-faint">{db.assets.length} holdings</div>
 
         {/* Currency toggle */}
-        <div className="mt-3.5 inline-flex rounded-[9px] bg-[#E9E9EB] p-0.5 text-[12px] font-semibold">
+        <ToggleGroup
+          type="single"
+          value={ccy}
+          onValueChange={(v) => { if (v) setCcy(v as typeof ccy); }}
+          className="mt-3.5 h-auto gap-0 rounded-[9px] bg-[#E9E9EB] p-0.5"
+        >
           {(["VND", "USD"] as const).map((c) => (
-            <button
+            <ToggleGroupItem
               key={c}
-              onClick={() => setCcy(c)}
-              className={`rounded-[7px] px-2.5 py-1.5 ${ccy === c ? "bg-card shadow-sm" : "text-foreground/70"}`}
+              value={c}
+              className="h-auto min-w-0 rounded-[7px] px-2.5 py-1.5 text-[12px] font-semibold text-foreground/70 hover:bg-transparent hover:text-foreground/70 data-[state=on]:bg-card data-[state=on]:shadow-sm data-[state=on]:text-foreground"
             >
               {c === "VND" ? "₫ VND" : "$ USD"}
-            </button>
+            </ToggleGroupItem>
           ))}
-        </div>
+        </ToggleGroup>
 
         {/* Stat chips */}
         <div className="mt-3 flex flex-col gap-1.5">

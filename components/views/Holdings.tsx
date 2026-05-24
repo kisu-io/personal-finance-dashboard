@@ -7,6 +7,7 @@ import { pct, arrow, fmtN } from "@/lib/format";
 import type { Asset, Term } from "@/lib/types";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function Holdings({ onEdit }: { onEdit: (id: string) => void }) {
   const { db, ds } = useStore();
@@ -46,13 +47,22 @@ export function Holdings({ onEdit }: { onEdit: (id: string) => void }) {
 
   return (
     <div className="animate-fade-up px-3.5 pt-4">
-      <div className="mb-3 flex rounded-[9px] bg-[#E9E9EB] p-0.5 text-[13px] font-semibold">
+      <ToggleGroup
+        type="single"
+        value={mode}
+        onValueChange={(v) => { if (v) setMode(v as "term" | "class"); }}
+        className="mb-3 h-auto w-full gap-0 rounded-[9px] bg-[#E9E9EB] p-0.5"
+      >
         {(["term", "class"] as const).map((m) => (
-          <button key={m} onClick={() => setMode(m)} className={`flex-1 rounded-[7px] px-3 py-1.5 ${mode === m ? "bg-card shadow-sm" : "text-muted-foreground"}`}>
+          <ToggleGroupItem
+            key={m}
+            value={m}
+            className="h-auto min-w-0 flex-1 rounded-[7px] px-3 py-1.5 text-[13px] font-semibold text-muted-foreground hover:bg-transparent hover:text-muted-foreground data-[state=on]:bg-card data-[state=on]:shadow-sm data-[state=on]:text-foreground"
+          >
             {m === "term" ? "By horizon" : "By asset class"}
-          </button>
+          </ToggleGroupItem>
         ))}
-      </div>
+      </ToggleGroup>
 
       {mode === "term"
         ? (["short", "mid", "long"] as Term[]).map((t) => {

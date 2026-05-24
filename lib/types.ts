@@ -39,6 +39,7 @@ export interface Txn {
   type: TxnType;
   ccy: Currency;
   amount: number;
+  gainAmt?: number; // realized gain on sell, in same currency as amount
   note?: string;
 }
 

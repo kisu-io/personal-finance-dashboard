@@ -1,13 +1,19 @@
 "use client";
+import * as React from "react";
 import { useStore } from "@/lib/store";
 import { toVND } from "@/lib/finance";
 import { DEBT_LABELS } from "@/lib/classes";
 import { fmtN } from "@/lib/format";
 import { Card } from "@/components/ui/card";
 import type { SheetKind } from "@/components/forms/Sheets";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export function Manage({ openSheet }: { openSheet: (k: SheetKind, id?: string) => void }) {
-  const { db, ds, reset, exportJSON } = useStore();
+  const { db, ds, reset, exportJSON, importJSON } = useStore();
+  const [resetOpen, setResetOpen] = React.useState(false);
 
   const Item = ({ em, label, extra, onClick }: { em: string; label: string; extra?: string; onClick: () => void }) => (
     <div onClick={onClick} className="mb-2.5 flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-card p-3.5 text-[15px] font-medium">
@@ -23,6 +29,7 @@ export function Manage({ openSheet }: { openSheet: (k: SheetKind, id?: string) =
       <Item em="➕" label="New investment / asset" onClick={() => openSheet("asset")} />
       <Item em="🔁" label="Record a transaction" onClick={() => openSheet("txn")} />
       <Item em="🏦" label="Add a liability" onClick={() => openSheet("debt")} />
+      <Item em="💰" label="Add income entry" onClick={() => openSheet("income")} />
 
       <div className="mx-1.5 mb-2 mt-5 text-[13px] font-semibold text-muted-foreground">Liabilities</div>
       <Card className="p-4">
@@ -37,11 +44,26 @@ export function Manage({ openSheet }: { openSheet: (k: SheetKind, id?: string) =
 
       <div className="mx-1.5 mb-2 mt-5 text-[13px] font-semibold text-muted-foreground">Settings</div>
       <Item em="💱" label="FX rate" extra={`1$ = ${fmtN(db.fx)}₫`} onClick={() => openSheet("fx")} />
+      <Item em="📸" label="Save net-worth snapshot" onClick={() => openSheet("snapshot")} />
       <Item em="⬇️" label="Export data (JSON)" onClick={exportJSON} />
-      <Item em="♻️" label="Reset to sample data" onClick={() => { if (confirm("Reset to sample data? Local changes will be lost.")) reset(); }} />
+      <Item em="⬆️" label="Import data (JSON)" onClick={importJSON} />
+      <Item em="♻️" label="Reset to sample data" onClick={() => setResetOpen(true)} />
       <div className="mt-2 px-0.5 text-xs leading-relaxed text-faint">
         Phase 1 prototype · data stored locally on this device. Phase 2 swaps this for cloud sync (Supabase) with one login.
       </div>
+
+      <AlertDialog open={resetOpen} onOpenChange={setResetOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reset to sample data?</AlertDialogTitle>
+            <AlertDialogDescription>All local changes will be lost and replaced with the seed portfolio.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={reset}>Reset</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

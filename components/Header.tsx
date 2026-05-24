@@ -2,6 +2,7 @@
 import { useStore } from "@/lib/store";
 import { grossAssets, totalDebt, netWorth, xirr, buildFlows } from "@/lib/finance";
 import { pct, arrow, fmtN } from "@/lib/format";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export function Header({ onAdd, onFx }: { onAdd: () => void; onFx: () => void }) {
   const { db, ccy, setCcy, d, ds } = useStore();
@@ -32,17 +33,22 @@ export function Header({ onAdd, onFx }: { onAdd: () => void; onFx: () => void })
         <span className="text-faint">· {db.assets.length} holdings</span>
       </div>
 
-      <div className="mt-3.5 inline-flex rounded-[9px] bg-[#E9E9EB] p-0.5 text-[13px] font-semibold">
+      <ToggleGroup
+        type="single"
+        value={ccy}
+        onValueChange={(v) => { if (v) setCcy(v as typeof ccy); }}
+        className="mt-3.5 h-auto gap-0 rounded-[9px] bg-[#E9E9EB] p-0.5"
+      >
         {(["VND", "USD"] as const).map((c) => (
-          <button
+          <ToggleGroupItem
             key={c}
-            onClick={() => setCcy(c)}
-            className={`rounded-[7px] px-3 py-1.5 ${ccy === c ? "bg-card shadow-sm" : "text-foreground/70"}`}
+            value={c}
+            className="h-auto min-w-0 rounded-[7px] px-3 py-1.5 text-[13px] font-semibold text-foreground/70 hover:bg-transparent hover:text-foreground/70 data-[state=on]:bg-card data-[state=on]:shadow-sm data-[state=on]:text-foreground"
           >
             {c === "VND" ? "₫ VND" : "$ USD"}
-          </button>
+          </ToggleGroupItem>
         ))}
-      </div>
+      </ToggleGroup>
 
       <div className="mt-3.5 flex overflow-hidden rounded-lg border border-border bg-card">
         <Chip k="Gross assets" v={ds(grossAssets(db))} />
