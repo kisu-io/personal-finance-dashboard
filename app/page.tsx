@@ -6,6 +6,5 @@ import { DesktopApp } from "@/components/layout/DesktopApp";
 
 export default function Page() {
   const isDesktop = useIsDesktop();
-  if (isDesktop === null) return null;
   return isDesktop ? <DesktopApp /> : <MobileApp />;
 }
