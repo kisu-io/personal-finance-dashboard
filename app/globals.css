@@ -41,8 +41,6 @@
   html, body { margin: 0; padding: 0; }
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    max-width: 480px;
-    margin: 0 auto;
     min-height: 100vh;
     letter-spacing: -0.01em;
   }
