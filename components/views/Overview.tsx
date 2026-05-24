@@ -3,11 +3,13 @@ import * as React from "react";
 import { useStore } from "@/lib/store";
 import { grossAssets, allocByClass, allocByTerm, driftItems } from "@/lib/finance";
 import { CLASSES, TERMS } from "@/lib/classes";
+import { ClassIcon } from "@/lib/class-icons";
 import { pct, arrow } from "@/lib/format";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { NetWorthChart, AllocDonut } from "@/components/charts/Charts";
+import { IconAlertTriangleFilled } from "@tabler/icons-react";
 
 const RANGES = [{ l: "6M", r: 6 }, { l: "1Y", r: 12 }, { l: "All", r: 0 }];
 
@@ -77,16 +79,23 @@ export function Overview() {
       <div className="mx-1.5 mb-2 mt-5 text-[13px] font-semibold text-muted-foreground">Target drift</div>
       <Card className="mb-3 p-4">
         {alerts.length > 0 && (
-          <Badge variant="neg" className="mb-2.5">⚠︎ {alerts.length} class(es) drifted beyond band — consider rebalancing</Badge>
+          <Badge variant="neg" className="mb-2.5 inline-flex items-center gap-1.5">
+            <IconAlertTriangleFilled size={12} />
+            {alerts.length} class(es) drifted beyond band — consider rebalancing
+          </Badge>
         )}
         {drift.map((x) => {
           const span = Math.max(x.target, x.pctv);
           return (
             <div key={x.cls} className="border-b border-[hsl(var(--sep))] py-2.5 last:border-0">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold">{CLASSES[x.cls].ico} {CLASSES[x.cls].label}</span>
+                <span className="flex items-center gap-1.5 text-sm font-semibold">
+                  <ClassIcon cls={x.cls} size={15} stroke={1.9} />
+                  {CLASSES[x.cls].label}
+                </span>
                 <span className={`flex items-center gap-1 text-xs font-bold ${x.over ? "text-neg" : "text-muted-foreground"}`}>
-                  {arrow(x.dr)} {pct(x.dr)}{x.over ? " ⚠︎" : ""}
+                  {arrow(x.dr)} {pct(x.dr)}
+                  {x.over && <IconAlertTriangleFilled size={11} />}
                 </span>
               </div>
               <div className="relative mt-2 h-[7px] overflow-hidden rounded-md bg-background">

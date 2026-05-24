@@ -3,6 +3,7 @@ import { useStore } from "@/lib/store";
 import { toVND } from "@/lib/finance";
 import { Card } from "@/components/ui/card";
 import { IncomeBar } from "@/components/charts/Charts";
+import { IconCoin } from "@tabler/icons-react";
 
 export function Income() {
   const { db, ds } = useStore();
@@ -40,7 +41,9 @@ export function Income() {
       <Card className="p-4">
         {log.length ? log.map((i, idx) => (
           <div key={idx} className="flex items-center gap-3 border-b border-[hsl(var(--sep))] py-3 last:border-0">
-            <div className="grayscale-ico grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[9px] bg-background text-[17px]">💰</div>
+            <div className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[9px] bg-background text-muted-foreground">
+              <IconCoin size={18} stroke={1.9} />
+            </div>
             <div className="flex-1"><div className="text-[15px] font-semibold">{i.name}</div><div className="text-xs text-faint">{i.date}</div></div>
             <div className="tabular text-[15px] font-bold text-pos">+{ds(toVND(i.amount, i.ccy, db.fx))}</div>
           </div>

@@ -2,6 +2,7 @@
 import * as React from "react";
 import { useStore } from "@/lib/store";
 import { CLASSES } from "@/lib/classes";
+import { ClassIcon } from "@/lib/class-icons";
 import { netWorth } from "@/lib/finance";
 import type { Asset, Debt, Txn, IncomeEntry, AssetClass, Term, Currency, TxnType, DebtType } from "@/lib/types";
 import { fmtDate } from "@/lib/format";
@@ -60,7 +61,12 @@ function AssetForm({ id, onClose }: { id?: string; onClose: () => void }) {
       <Field label="Asset class">
         <Sel value={f.cls} onValueChange={(v) => set("cls", v as AssetClass)}>
           {(Object.keys(CLASSES) as AssetClass[]).map((k) => (
-            <SelectItem key={k} value={k}>{CLASSES[k].ico} {CLASSES[k].label}</SelectItem>
+            <SelectItem key={k} value={k}>
+              <span className="inline-flex items-center gap-2">
+                <ClassIcon cls={k} size={15} stroke={1.9} />
+                {CLASSES[k].label}
+              </span>
+            </SelectItem>
           ))}
         </Sel>
       </Field>

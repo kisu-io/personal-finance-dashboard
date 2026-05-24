@@ -3,6 +3,7 @@ import * as React from "react";
 import { useStore } from "@/lib/store";
 import { grossAssets, assetVND, costVND, allocByClass } from "@/lib/finance";
 import { CLASSES, TERMS } from "@/lib/classes";
+import { ClassIcon } from "@/lib/class-icons";
 import { pct, arrow, fmtN } from "@/lib/format";
 import type { Asset, Term } from "@/lib/types";
 import { Card } from "@/components/ui/card";
@@ -18,7 +19,9 @@ export function Holdings({ onEdit }: { onEdit: (id: string) => void }) {
     const v = assetVND(x, db.fx), c = costVND(x, db.fx), gain = v - c, gp = c > 0 ? (gain / c) * 100 : 0;
     return (
       <div key={x.id} onClick={() => onEdit(x.id)} className="flex cursor-pointer items-center gap-3 border-b border-[hsl(var(--sep))] py-3 last:border-0">
-        <div className="grayscale-ico grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[9px] bg-background text-[17px]">{CLASSES[x.cls].ico}</div>
+        <div className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[9px] bg-background text-muted-foreground">
+          <ClassIcon cls={x.cls} size={18} stroke={1.9} />
+        </div>
         <div className="min-w-0 flex-1">
           <div className="text-[15px] font-semibold">{x.name}</div>
           <div className="mt-px text-xs text-faint">
@@ -74,7 +77,13 @@ export function Holdings({ onEdit }: { onEdit: (id: string) => void }) {
         : allocByClass(db).map(({ cls }) => {
             const arr = db.assets.filter((x) => x.cls === cls);
             const sum = arr.reduce((s, x) => s + assetVND(x, db.fx), 0);
-            return <Group key={cls} title={`${CLASSES[cls].ico} ${CLASSES[cls].label}`} sum={sum} items={arr} />;
+            const title = (
+              <span className="flex items-center gap-1.5">
+                <ClassIcon cls={cls} size={15} stroke={1.9} />
+                {CLASSES[cls].label}
+              </span>
+            );
+            return <Group key={cls} title={title} sum={sum} items={arr} />;
           })}
     </div>
   );
